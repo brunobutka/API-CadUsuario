@@ -22,7 +22,6 @@ public class Usuario extends GenericEntity {
 	private boolean status;
 	
 	
-	
 	public String getEmail() {
 		return email;
 	}
