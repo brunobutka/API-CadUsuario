@@ -9,9 +9,9 @@ import br.edu.atitus.pooavancado.CadUsuario.entities.GenericEntity;
 import br.edu.atitus.pooavancado.CadUsuario.entities.Usuario;
 import br.edu.atitus.pooavancado.CadUsuario.repositories.GenericRepository;
 
-public interface GenericService<TEntidade extends GenericEntity, TRepository extends GenericRepository<TEntidade>> {
+public interface GenericService<TEntidade extends GenericEntity> {
 
-	TRepository getRepository();
+	GenericRepository<TEntidade> getRepository();
 	
 	default TEntidade save(TEntidade objeto) throws Exception{
 		if(getRepository().existsByNomeAndIdNot(objeto.getNome(), objeto.getId()))
