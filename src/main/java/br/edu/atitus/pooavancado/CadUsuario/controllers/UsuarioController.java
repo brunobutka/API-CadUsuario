@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.edu.atitus.pooavancado.CadUsuario.entities.Usuario;
 import br.edu.atitus.pooavancado.CadUsuario.services.GenericService;
 import br.edu.atitus.pooavancado.CadUsuario.services.UsuarioService;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping("/usuarios")
@@ -29,7 +30,7 @@ public class UsuarioController extends GenericController<Usuario>{
 		return usuarioService;
 	}
 
-		
+	@Operation(description = "Método para alterar o status do usuário")	
 	@PatchMapping("/status/{id}")
 	public ResponseEntity<Object> alteraStatus(@PathVariable long id){
 		try {
