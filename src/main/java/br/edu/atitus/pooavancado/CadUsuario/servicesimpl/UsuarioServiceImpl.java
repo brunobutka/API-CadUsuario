@@ -1,19 +1,16 @@
 package br.edu.atitus.pooavancado.CadUsuario.servicesimpl;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import br.edu.atitus.pooavancado.CadUsuario.entities.Usuario;
 import br.edu.atitus.pooavancado.CadUsuario.repositories.UsuarioRepository;
 import br.edu.atitus.pooavancado.CadUsuario.services.UsuarioService;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class UsuarioServiceImpl implements UsuarioService{
+public class UsuarioServiceImpl implements UsuarioService, UserDetailsService {
 
 	final UsuarioRepository usuarioRepository;
 
@@ -34,6 +31,22 @@ public class UsuarioServiceImpl implements UsuarioService{
 			throw new Exception("Não existe usuário com o ID: " + id);
 			
 		usuarioRepository.alteraStatus(id);
-	}	
-	
+	}
+
+	@Override
+	public void validadeSave(Usuario objeto) throws Exception {
+		UsuarioService.super.validadeSave(objeto);
+		if(objeto.getEmail() == null || objeto.getEmail().isEmpty())
+			throw new Exception("É necessário informar um e-mail válido");
+		if(getRepository().existsByEmailAndIdNot(objeto.getEmail(), objeto.getId()))
+			throw new Exception("Já existe cadastro com este e-mail");
+	}
+
+	@Override
+	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+		Usuario usuario = usuarioRepository.findByEmail(email)
+				.orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado com o e-mail: " + email));
+
+		return usuario;
+	}
 }

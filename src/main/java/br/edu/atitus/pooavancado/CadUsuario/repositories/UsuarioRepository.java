@@ -7,6 +7,8 @@ import org.springframework.stereotype.Repository;
 
 import br.edu.atitus.pooavancado.CadUsuario.entities.Usuario;
 
+import java.util.Optional;
+
 @Repository
 public interface UsuarioRepository extends GenericRepository<Usuario>{
 	
@@ -14,4 +16,7 @@ public interface UsuarioRepository extends GenericRepository<Usuario>{
 	@Modifying
 	void alteraStatus(@Param(value = "id") long id);
 
+	boolean existsByEmailAndIdNot(String email, long id);
+
+	Optional<Usuario> findByEmail(String email);
 }
